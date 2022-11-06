@@ -249,6 +249,7 @@ abstract contract ERC4626Prop is Test {
     function prop_RT_deposit_redeem(address caller, uint assets) public {
         if (!_vaultMayBeEmpty) vm.assume(IERC20(_vault_).totalSupply() > 0);
         vm.prank(caller); uint shares = vault_deposit(assets, caller);
+        vm.roll(block.number + 1); // roll the block height because some vaults prevent a tx from the same tx.origin on the same block number.
         vm.prank(caller); uint assets2 = vault_redeem(shares, caller, caller);
         assertApproxLeAbs(assets2, assets, _delta_);
     }
@@ -259,6 +260,7 @@ abstract contract ERC4626Prop is Test {
     function prop_RT_deposit_withdraw(address caller, uint assets) public {
         if (!_vaultMayBeEmpty) vm.assume(IERC20(_vault_).totalSupply() > 0);
         vm.prank(caller); uint shares1 = vault_deposit(assets, caller);
+        vm.roll(block.number + 1); // roll the block height because some vaults prevent a tx from the same tx.origin on the same block number.
         vm.prank(caller); uint shares2 = vault_withdraw(assets, caller, caller);
         assertApproxGeAbs(shares2, shares1, _delta_);
     }
@@ -267,6 +269,7 @@ abstract contract ERC4626Prop is Test {
     function prop_RT_redeem_deposit(address caller, uint shares) public {
         vm.prank(caller); uint assets = vault_redeem(shares, caller, caller);
         if (!_vaultMayBeEmpty) vm.assume(IERC20(_vault_).totalSupply() > 0);
+        vm.roll(block.number + 1); // roll the block height because some vaults prevent a tx from the same tx.origin on the same block number.
         vm.prank(caller); uint shares2 = vault_deposit(assets, caller);
         assertApproxLeAbs(shares2, shares, _delta_);
     }
@@ -277,6 +280,7 @@ abstract contract ERC4626Prop is Test {
     function prop_RT_redeem_mint(address caller, uint shares) public {
         vm.prank(caller); uint assets1 = vault_redeem(shares, caller, caller);
         if (!_vaultMayBeEmpty) vm.assume(IERC20(_vault_).totalSupply() > 0);
+        vm.roll(block.number + 1); // roll the block height because some vaults prevent a tx from the same tx.origin on the same block number.
         vm.prank(caller); uint assets2 = vault_mint(shares, caller);
         assertApproxGeAbs(assets2, assets1, _delta_);
     }
@@ -285,6 +289,7 @@ abstract contract ERC4626Prop is Test {
     function prop_RT_mint_withdraw(address caller, uint shares) public {
         if (!_vaultMayBeEmpty) vm.assume(IERC20(_vault_).totalSupply() > 0);
         vm.prank(caller); uint assets = vault_mint(shares, caller);
+        vm.roll(block.number + 1); // roll the block height because some vaults prevent a tx from the same tx.origin on the same block number.
         vm.prank(caller); uint shares2 = vault_withdraw(assets, caller, caller);
         assertApproxGeAbs(shares2, shares, _delta_);
     }
@@ -295,6 +300,7 @@ abstract contract ERC4626Prop is Test {
     function prop_RT_mint_redeem(address caller, uint shares) public {
         if (!_vaultMayBeEmpty) vm.assume(IERC20(_vault_).totalSupply() > 0);
         vm.prank(caller); uint assets1 = vault_mint(shares, caller);
+        vm.roll(block.number + 1); // roll the block height because some vaults prevent a tx from the same tx.origin on the same block number.
         vm.prank(caller); uint assets2 = vault_redeem(shares, caller, caller);
         assertApproxLeAbs(assets2, assets1, _delta_);
     }
@@ -303,6 +309,7 @@ abstract contract ERC4626Prop is Test {
     function prop_RT_withdraw_mint(address caller, uint assets) public {
         vm.prank(caller); uint shares = vault_withdraw(assets, caller, caller);
         if (!_vaultMayBeEmpty) vm.assume(IERC20(_vault_).totalSupply() > 0);
+        vm.roll(block.number + 1); // roll the block height because some vaults prevent a tx from the same tx.origin on the same block number.
         vm.prank(caller); uint assets2 = vault_mint(shares, caller);
         assertApproxGeAbs(assets2, assets, _delta_);
     }
@@ -313,6 +320,7 @@ abstract contract ERC4626Prop is Test {
     function prop_RT_withdraw_deposit(address caller, uint assets) public {
         vm.prank(caller); uint shares1 = vault_withdraw(assets, caller, caller);
         if (!_vaultMayBeEmpty) vm.assume(IERC20(_vault_).totalSupply() > 0);
+        vm.roll(block.number + 1); // roll the block height because some vaults prevent a tx from the same tx.origin on the same block number.
         vm.prank(caller); uint shares2 = vault_deposit(assets, caller);
         assertApproxLeAbs(shares2, shares1, _delta_);
     }
